@@ -2,8 +2,8 @@
 
 import re
 
-filename = input('enter the HTML file name: ')
-toChange = input('enter what to change: ')
+filename = input('enter the HTML file path: ')
+toChange = input('add num right after THIS: ')
 
 with open(filename, 'r') as fr:
     lines = fr.readlines()

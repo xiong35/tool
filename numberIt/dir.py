@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import os
-splash = '\ '[:-1]
+
+splash = r'\ '[:-1]
+
 changeDir = input('enter the dir: ')
-filename = input('enter the filename(split: 0): ')
+filename = input('enter the filename(spliter: 0): ')
+
 prefix, postfix = filename.split('0')
 
 if '/' in changeDir:
