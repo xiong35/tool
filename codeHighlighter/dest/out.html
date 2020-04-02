@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../src/css/style.css" />
+  </head>
+
+  <body>
+    <table class="paste">
+      <tbody>
+        <tr>
+          <td class="linenum">
+            <div>
+              <pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136</pre>
+            </div>
+          </td>
+          <td class="code">
+            <div>
+              <pre><span class="kwr">import</span> numpy <span class="kwr">as</span> np
+<span class="kwr">import</span> pandas <span class="kwr">as</span> pd
+<span class="kwr">import</span> matplotlib.pyplot <span class="kwr">as</span> plt
+
+<span class="kwb">class</span> <span class="cls">TreeNode</span>:
+    lChild = <span class="kwb">None</span>
+    rChild = <span class="kwb">None</span>
+    spVal = <span class="kwb">None</span>
+    spInd = <span class="kwb">None</span>
+
+<span class="kwb">def</span> <span class="fn">isTree</span>(tree):
+    <span class="kwr">if</span> tree.__class__ == TreeNode:
+        <span class="kwr">return</span> <span class="kwb">True</span>
+    <span class="kwr">return</span> <span class="kwb">False</span>
+
+<span class="kwb">def</span> <span class="fn">regLeaf</span>(dataSet, originData):
+    mean = np.mean(dataSet[:, <span class="num">0</span>])
+    changeList = dataSet[:, <span class="num">-1</span>]
+    <span class="kwr">for</span> changeInd <span class="kwb">in</span> changeList.A:
+        originData[<span class="fn">int</span>(changeInd), <span class="num">0</span>] -= mean
+    <span class="kwr">return</span> mean
+
+<span class="kwb">def</span> <span class="fn">regErr</span>(dataSet):
+    <span class="doc"># total error, <span class="kwb">not</span> MSE</span>
+    <span class="kwr">return</span> np.var(dataSet[:, <span class="num">0</span>])*<span class="fn">len</span>(dataSet)
+
+<span class="kwb">def</span> <span class="fn">regTreeEval</span>(model, inDat):
+    <span class="kwr">return</span> <span class="fn">float</span>(model)
+
+<span class="kwb">class</span> <span class="cls">CART</span>:
+    Tree = <span class="kwb">None</span>
+    dataSet = <span class="kwb">None</span>
+    testData = <span class="kwb">None</span>
+
+    <span class="kwb">def</span> <span class="fn">__init__</span>(self, filename):
+        df = pd.read_csv(filename, header=<span class="num">0</span>, sep=",", dtype=<span class="fn">float</span>)
+        df[<span class="str">'counter'</span>] = <span class="fn">range</span>(<span class="fn">len</span>(df))
+        self.dataSet = np.mat(df)
+        self.testData = self.dataSet[<span class="num">-100</span>:]
+        self.dataSet = self.dataSet[:<span class="num">-100</span>]
+
+    <span class="kwb">def</span> <span class="fn">binSplitDataSet</span>(self, dataSet, feature, value):
+        mat0 = dataSet[np.nonzero(dataSet[:, feature] > value)[<span class="num">0</span>], :]
+        mat1 = dataSet[np.nonzero(dataSet[:, feature] <= value)[<span class="num">0</span>], :]
+        <span class="kwr">return</span> mat0, mat1
+
+    <span class="kwb">def</span> <span class="fn">createTree(self, dataSet, originData, ops=</span>(<span class="num">0</span>.<span class="num">05</span>, <span class="num">10</span>)):
+        dataSet = np.mat(dataSet)
+        feat, val = self.chooseBestSplit(dataSet, originData, ops)
+        <span class="kwr">if</span> feat == <span class="kwb">None</span>:
+            <span class="kwr">return</span> val
+        retTree = TreeNode()
+        retTree.spInd = feat
+        retTree.spVal = val
+        lSet, rSet = self.binSplitDataSet(dataSet, feat, val)
+        retTree.lChild = self.createTree(lSet, originData, ops)
+        retTree.rChild = self.createTree(rSet, originData, ops)
+        <span class="kwr">return</span> retTree
+
+    <span class="kwb">def</span> <span class="fn">chooseBestSplit(self, dataSet, originData, ops=</span>(<span class="num">1</span>.<span class="num">5</span>, <span class="num">5</span>)):
+        <span class="doc"># minimum step of descent</span>
+        tolS = ops[<span class="num">0</span>]
+        <span class="doc"># minimum num of samples to split</span>
+        tolN = ops[<span class="num">1</span>]
+        <span class="kwr">if</span> <span class="fn">len</span>(<span class="fn">set</span>(dataSet[:, <span class="num">0</span>].T.tolist()[<span class="num">0</span>])) == <span class="num">1</span>:
+            <span class="kwr">return</span> <span class="kwb">None</span>, regLeaf(dataSet, originData)
+        _, n = np.shape(dataSet)
+        S = regErr(dataSet)
+        bestS = np.inf
+        bestIndex = <span class="num">0</span>
+        bestValue = <span class="num">0</span>
+        <span class="kwr">for</span> featIndex <span class="kwb">in</span> <span class="fn">range</span>(<span class="num">1</span>, n<span class="num">-1</span>):
+            <span class="kwr">for</span> splitVal <span class="kwb">in</span> <span class="fn">set</span>(dataSet[:, featIndex].T.tolist()[<span class="num">0</span>]):
+                mat0, mat1 = self.binSplitDataSet(dataSet, featIndex, splitVal)
+                <span class="kwr">if</span> (np.shape(mat0)[<span class="num">0</span>] < tolN) <span class="kwb">or</span> (np.shape(mat1)[<span class="num">0</span>] < tolN):
+                    <span class="kwr">continue</span>
+                newS = regErr(mat0) + regErr(mat1)
+                <span class="kwr">if</span> newS < bestS:
+                    bestIndex = featIndex
+                    bestValue = splitVal
+                    bestS = newS
+        <span class="kwr">if</span> (S - bestS) < tolS:
+            <span class="kwr">return</span> <span class="kwb">None</span>, regLeaf(dataSet, originData)
+        mat0, mat1 = self.binSplitDataSet(dataSet, bestIndex, bestValue)
+        <span class="kwr">if</span> (np.shape(mat0)[<span class="num">0</span>] < tolN) <span class="kwb">or</span> (np.shape(mat1)[<span class="num">0</span>] < tolN):
+            <span class="kwr">return</span> <span class="kwb">None</span>, regLeaf(dataSet, originData)
+        <span class="kwr">return</span> bestIndex, bestValue
+
+    <span class="kwb">def</span> <span class="fn">createFore</span>(self, tree):
+        m = <span class="fn">len</span>(self.testData)
+        yHat = np.mat(np.zeros((m, <span class="num">1</span>)))
+        <span class="kwr">for</span> i <span class="kwb">in</span> <span class="fn">range</span>(m):
+            yHat[i, <span class="num">0</span>] = self.treeForecast(tree, self.testData[i])
+        <span class="kwr">return</span> yHat
+
+    <span class="kwb">def</span> <span class="fn">treeForecast</span>(self, tree, inData):
+        <span class="kwr">if</span> <span class="kwb">not</span> isTree(tree):
+            <span class="kwr">return</span> regTreeEval(tree, inData)
+        <span class="doc"># inData <span class="kwb">is</span> a <span class="num">1</span>*m matrix</span>
+        <span class="kwr">if</span> inData.tolist()[<span class="num">0</span>][tree.spInd] > tree.spVal:
+            <span class="kwr">if</span> isTree(tree.lChild):
+                <span class="kwr">return</span> self.treeForecast(tree.lChild, inData)
+            <span class="kwr">else</span>:
+                <span class="kwr">return</span> regTreeEval(tree.lChild, inData)
+        <span class="kwr">else</span>:
+            <span class="kwr">if</span> isTree(tree.rChild):
+                <span class="kwr">return</span> self.treeForecast(tree.rChild, inData)
+            <span class="kwr">else</span>:
+                <span class="kwr">return</span> regTreeEval(tree.rChild, inData)
+
+    <span class="kwb">def</span> <span class="fn">predict</span>(self):
+        numOfTrees = <span class="num">5</span>
+        forest = []
+        <span class="kwr">for</span> i <span class="kwb">in</span> <span class="fn">range</span>(numOfTrees):
+            tree = self.createTree(self.dataSet, self.dataSet)
+            forest.append(tree)
+        forestPred = np.zeros((<span class="fn">len</span>(self.testData),<span class="num">1</span>))
+        <span class="kwr">for</span> i <span class="kwb">in</span> <span class="fn">range</span>(numOfTrees):
+            predVec = self.createFore(forest[i])
+            forestPred += predVec.A
+            plt.plot(forestPred,label=<span class="str">'{}'</span>.<span class="fn">format</span>(i<span class="num">+1</span>))
+        acc = <span class="num">0</span>
+        plt.legend()
+        plt.show()
+        <span class="kwr">for</span> i <span class="kwb">in</span> <span class="fn">range</span>(<span class="fn">len</span>(forestPred)):
+            <span class="kwr">if</span> forestPred[i] > <span class="num">0</span>.<span class="num">5</span>:
+                forestPred[i] = <span class="num">1</span>
+            <span class="kwr">else</span>:
+                forestPred[i] = <span class="num">0</span>
+            <span class="kwr">if</span> forestPred[i] == self.testData[i, <span class="num">0</span>]:
+                acc += <span class="num">1</span>
+        acc /= <span class="fn">len</span>(self.testData)
+        <span class="fn">print</span>(<span class="str">'acc: '</span>, acc)
+
+c = CART(R<span class="str">'lian_chuang\data\myTitanic.csv'</span>)
+c.predict()</pre>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

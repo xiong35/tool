@@ -1,0 +1,41 @@
+table.paste {
+  display: table;
+  background-color: #272624;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 14px;
+  color: #d4d4d2;
+}
+td.linenum {
+  padding: 0px 10px 0px 5px;
+  text-align: right;
+  color: #868684;
+}
+span.kwr {
+  color: #bb7bb3;
+  font-weight: bold;
+}
+span.kwb {
+  color: #498dc5;
+  font-weight: bold;
+}
+span.fn {
+  color: #d3d397;
+}
+span.num {
+  color: #a5c095;
+}
+span.str {
+  color: #d8ab81 !important;
+  font-weight: normal !important;
+}
+span.cls {
+  color: #53c78f;
+}
+span.doc {
+  color: #77a062 !important;
+  font-weight: normal !important;
+}
+span.doc > span {
+  color: #77a062 !important;
+  font-weight: normal !important;
+}
