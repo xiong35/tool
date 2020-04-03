@@ -199,7 +199,7 @@
         mat1 = dataSet[np.nonzero(dataSet[:, feature] <= value)[<span class="num">0</span>], :]
         <span class="kwr">return</span> mat0, mat1
 
-    <span class="kwb">def</span> <span class="fn">createTree(self, dataSet, originData, ops=</span>(<span class="num">0</span>.<span class="num">05</span>, <span class="num">10</span>)):
+    <span class="kwb">def</span> <span class="fn">createTree</span>(self, dataSet, originData, ops=(<span class="num">0</span>.<span class="num">05</span>, <span class="num">10</span>)):
         dataSet = np.mat(dataSet)
         feat, val = self.chooseBestSplit(dataSet, originData, ops)
         <span class="kwr">if</span> feat == <span class="kwb">None</span>:
@@ -212,7 +212,7 @@
         retTree.rChild = self.createTree(rSet, originData, ops)
         <span class="kwr">return</span> retTree
 
-    <span class="kwb">def</span> <span class="fn">chooseBestSplit(self, dataSet, originData, ops=</span>(<span class="num">1</span>.<span class="num">5</span>, <span class="num">5</span>)):
+    <span class="kwb">def</span> <span class="fn">chooseBestSplit</span>(self, dataSet, originData, ops=(<span class="num">1</span>.<span class="num">5</span>, <span class="num">5</span>)):
         <span class="doc"># minimum step of descent</span>
         tolS = ops[<span class="num">0</span>]
         <span class="doc"># minimum num of samples to split</span>
