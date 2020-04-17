@@ -33,15 +33,15 @@ export default {
 
 print('removed helloworld')
 
-os.mkdir('assets')
-os.mkdir('components')
-os.mkdir('components/common')
-os.mkdir('components/content')
-os.mkdir('network')
-os.mkdir('routers')
-os.mkdir('store')
-os.mkdir('views')
-os.mkdir('common')
+os.mkdir('src/assets')
+os.mkdir('src/components')
+os.mkdir('src/components/common')
+os.mkdir('src/components/content')
+os.mkdir('src/network')
+os.mkdir('src/routers')
+os.mkdir('src/store')
+os.mkdir('src/views')
+os.mkdir('src/common')
 
 print("made dirs")
 
