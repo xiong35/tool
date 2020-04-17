@@ -33,8 +33,7 @@ export default {
 
 print('removed helloworld')
 
-os.mkdir('src/assets')
-os.mkdir('src/components')
+os.mkdir('src/assets/img')
 os.mkdir('src/components/common')
 os.mkdir('src/components/content')
 os.mkdir('src/network')
