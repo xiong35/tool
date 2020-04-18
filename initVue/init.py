@@ -89,6 +89,34 @@ new Vue({
 
 print("changed main.js")
 
+with open('src/routers/index.js','w') as fw:
+    fw.write('''import Vue from "vue";
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
+
+const someRoute = () => import("views/someRoute/someRoute");
+
+const routes = [
+  {
+    path: "",
+    redirect: "/home"
+  },
+  {
+    path: "/home",
+    component: someRoute
+  },
+];
+
+const router = new VueRouter({
+  routes,
+  mode: "history"
+});
+
+export default router;
+''')
+
+print("create main router")
+
 os.system('cnpm install vue bootstrap-vue vue-router font-awesome axios vuex --save')
 
 print("installed packages")
