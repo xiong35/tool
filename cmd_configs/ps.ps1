@@ -10,7 +10,7 @@ Import-Module oh-my-posh
 Set-Theme Avit
 
 $path_=pwd|Out-String
-if ($path_.Contains("\Windows\system32"))
+if ($path_.Contains("\Windows\System32"))
 {
     cd C:\Users\xiong35\Desktop
 }
